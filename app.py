@@ -13,28 +13,32 @@ def load_models():
     # Pipeline 1:  fine-tuned actual Hugging Face model paths
     sentiment_pipe = pipeline(
         "text-classification",
-        model="YOUR_HF_USERNAME/YOUR_FINETUNED_MODEL"
+        model="leahleaf/amazon-sentiment-classifier"
     )
     # Pipeline 2: Zero-shot
     zeroshot_pipe = pipeline(
         "zero-shot-classification",
-        model="cross-encoder/nli-deberta-v3-small"
+        model="facebook/bart-large-mnli"
     )
     return sentiment_pipe, zeroshot_pipe
 
 sentiment_pipe, zeroshot_pipe = load_models()
 
-CANDIDATE_LABELS = [
-    "fragrance issue", "packaging issue", "skin irritation",
-    "texture problem", "effectiveness issue",
-    "delivery or damaged item", "value for money"
+candidate_labels = [
+    "bad smell or taste",
+    "pain or irritation",
+    "not effective",
+    "poor quality or broke easily",
+    "size or expectation mismatch",
+    "packaging or damaged item",
+    "takes too long or inconvenient",
+    "not worth the price",
+    "other"
 ]
 
-# LABEL_MAP = {"LABEL_0": "Negative", "LABEL_1": "Neutral", "LABEL_2": "Positive"}
-# PRIORITY_MAP = {"Negative": "🔴 High", "Neutral": "🟡 Medium", "Positive": "🟢 Low"}
 LABEL_MAP     = {"LABEL_0": "Negative", "LABEL_1": "Positive"}
 PRIORITY_MAP  = {"Negative": "🔴 High Priority", "Positive": "🟢 Low Priority"}
-# ── 主界面 ───────────────────────────────────────────────────────
+# ── main interface ───────────────────────────────────────────────────────
 review_input = st.text_area("📝 Paste a customer review here:", height=150)
 
 if st.button("Analyze Review") and review_input.strip():
