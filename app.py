@@ -5,7 +5,7 @@ import torch
 
 st.set_page_config(page_title="Amazon Review Intelligence", page_icon="🛍️")
 st.title("🛍️ Customer Review Intelligence System")
-st.caption("Powered by fine-tuned DistilBERT + Zero-shot Classification")
+st.caption("Powered by fine-tuned roberta-base + Zero-shot Classification")
 
 # load models 
 @st.cache_resource
@@ -56,7 +56,7 @@ if st.button("Analyze Review") and review_input.strip():
         # Pipeline 2
         if sentiment in ["Negative", "Neutral"]:
             st.subheader("🔍 Detected Issue")
-            z_result  = zeroshot_pipe(review_input[:512], CANDIDATE_LABELS)
+            z_result  = zeroshot_pipe(review_input[:512], candidate_labels)
             top_issue = z_result["labels"][0]
             top_score = z_result["scores"][0]
             st.success(f"**{top_issue}** (confidence: {top_score:.1%})")
